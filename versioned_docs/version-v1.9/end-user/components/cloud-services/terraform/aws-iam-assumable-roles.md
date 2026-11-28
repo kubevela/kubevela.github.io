@@ -39,7 +39,7 @@ Terraform module which creates IAM resources on AWS
  readonly_role_tags | A map of tags to add to readonly role resource. | map(string) | false |  
  trusted_role_arns | ARNs of AWS entities who can assume these roles | list(string) | false |  
  trusted_role_services | AWS Services that can assume these roles | list(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

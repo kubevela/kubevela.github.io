@@ -27,7 +27,7 @@ A Terraform module that creates IAM role with provided JSON IAM polices document
  role_description | The description of the IAM role that is visible in the IAM role manager | string | true |  
  role_tags_enabled | Enable/disable tags on IAM roles | string | false |  
  use_fullname | If set to 'true' then the full ID for the IAM role name (e.g. `[var.namespace]-[var.environment]-[var.stage]`) will be used.\n\nOtherwise, `var.name` will be used for the IAM role name.\n | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

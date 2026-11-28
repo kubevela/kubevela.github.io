@@ -19,7 +19,7 @@ Terraform module which creates Cloudwatch resources on AWS
  name_prefix | A name prefix for the log group | string | false |  
  retention_in_days | Specifies the number of days you want to retain log events in the specified log group | number | false |  
  tags | A map of tags to add to Cloudwatch log group | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

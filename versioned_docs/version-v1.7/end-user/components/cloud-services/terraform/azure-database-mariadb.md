@@ -42,7 +42,7 @@ spec:
  resource_group | Resource group | string | false |  
  server_name | mariadb server name | string | false |  
  username | Database instance username | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

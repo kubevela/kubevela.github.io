@@ -30,7 +30,7 @@ A terraform module to deploy a node problem detector on Amazon EKS cluster
  k8s_namespace | The K8s namespace in which the node-problem-detector service account has been created | string | false |  
  settings | Additional settings which will be passed to the Helm chart values, see https://hub.helm.sh/charts/stable/node-problem-detector | map(any) | false |  
  values | Additional yaml encoded values which will be passed to the Helm chart | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

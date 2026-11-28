@@ -40,7 +40,7 @@ Quickly create slb listeners resources on AliCloud based on Terraform module.
  ssl_certificates | SLB Server certificate settings to use on listeners. It's supports fields 'tls_cipher_policy', 'server_certificate_id' and 'enable_http2'. | map(string) | false |  
  sticky_session_type | (Deprecated) It has been deprecated from 1.2.0, use 'listeners' and 'advance_setting' instead. | string | false |  
  unhealthy_threshold | (Deprecated) It has been deprecated from 1.2.0, use 'listeners' and 'health_check' instead. | number | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  x_forwarded_for | Additional HTTP Header field 'X-Forwarded-For' to use on listeners. It's supports fields 'retrive_slb_ip', 'retrive_slb_id' and 'retrive_slb_proto'. | map(bool) | false |  
 
 

@@ -19,7 +19,7 @@ Terraform configuration for Alibaba Cloud VSwitch.
  vswitch_cidr | cidr blocks used to launch a new vswitch. | string | false |  
  vswitch_description | The vswitch description used to launch several new vswitch. | string | false |  
  vswitch_name | The vswitch name prefix used to launch several new vswitches. |  | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone_id | Availability Zone ID. | string | false |  
 
 

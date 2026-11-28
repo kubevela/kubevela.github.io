@@ -19,7 +19,7 @@ First step using GCP and Terraform
  project_id | GCP project ID | string | true |  
  region | GCP region | string | true |  
  username | I think you'll figure this one out | string | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone | GCP zone | string | false |  
 
 

@@ -17,7 +17,7 @@ Terraform configuration for Alicloud NAS.
  name | The name of the security group rule. | string | false |  
  namePrefix | . | string | false |  
  port_range | The port range of the security group rule. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone_id | Availability Zone ID. | string | false |  
 
 

@@ -50,7 +50,7 @@ Terraform-based modules are used to create a Private Zone on AliCloud, while you
  target_tracking_rule_metric_name | The predefined metric to monitor. This parameter is required and applicable only to target tracking scaling rules. See valid values: https://www.alibabacloud.com/help/doc-detail/25948.htm. | string | false |  
  target_value | The target value of a metric. This parameter is required and applicable only to target tracking scaling rules. It must be greater than 0 and can have a maximum of three decimal places. | string | false |  
  task_actions | The list of actions to execute when this alarm transition into an ALARM state. | list(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

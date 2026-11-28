@@ -17,7 +17,7 @@ GCP Basic_vpc_module
  network_name |  |  | true |  
  region |  |  | true |  
  ssh_source_ips |  |  | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

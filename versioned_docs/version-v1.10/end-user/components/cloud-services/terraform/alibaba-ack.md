@@ -50,7 +50,7 @@ spec:
  vswitch_ids | List of existing vswitch id. | list(any) | false |  
  vswitch_name_prefix | The vswitch name prefix used to create several new vswitches. Default to variable 'example_name'. | string | false |  
  worker_instance_types | The ecs instance types used to launch worker nodes. | list(any) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone_id | Availability Zone ID. | string | false |  
 
 

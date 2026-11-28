@@ -24,7 +24,7 @@ AWS VPC
  name | Name to be used on all the resources as identifier | string | false |  
  tags | A map of tags to add to all resources | map(string) | false |  
  vpc_tags | Additional tags for the VPC | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

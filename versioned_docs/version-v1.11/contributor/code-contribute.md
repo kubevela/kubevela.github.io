@@ -298,7 +298,7 @@ If this is your first time contributing to an open-source project on GitHub, mak
 To increase the chance of having your pull request accepted, make sure your pull request follows these guidelines:
 
 - Title and description matches the implementation.
-- Commits within the pull request follow the [Formatting guidelines](#Formatting-guidelines).
+- Commits within the pull request follow the [Formatting guidelines](#formatting-guidelines).
 - The pull request closes one related issue.
 - The pull request contains necessary tests that verify the intended behavior.
 - If your pull request has conflicts, rebase your branch onto the main branch.

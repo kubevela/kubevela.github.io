@@ -21,7 +21,7 @@ Alibaba RDS in a preview mode.
  sql_bucket_endpoint | The endpoint of the bucket. like `oss-cn-hangzhou.aliyuncs.com`. | string | false |  
  sql_bucket_name | The bucket name of the SQL file. like `oss://example`. | string | false |  
  sql_file | The name of SQL file in the bucket, like `db.sql`. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

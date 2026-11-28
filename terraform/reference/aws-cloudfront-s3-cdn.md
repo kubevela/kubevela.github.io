@@ -65,7 +65,7 @@ Terraform module to easily provision CloudFront CDN backed by an S3 origin
  wait_for_deployment | When set to 'true' the resource will wait for the distribution status to change from InProgress to Deployed | bool | false |  
  web_acl_id | ID of the AWS WAF web ACL that is associated with the distribution | string | false |  
  website_enabled | Set to true to enable the created S3 bucket to serve as a website independently of Cloudfront,\nand to use that website as the origin. See the README for details and caveats. See also `s3_website_password_enabled`.\n | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 ### Schema Definitions

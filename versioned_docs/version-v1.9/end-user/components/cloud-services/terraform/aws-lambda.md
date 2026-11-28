@@ -114,7 +114,7 @@ Terraform module, which takes care of a lot of AWS Lambda/serverless tasks (buil
  use_existing_cloudwatch_log_group | Whether to use an existing CloudWatch log group or create new | bool | false |  
  vpc_security_group_ids | List of security group ids when Lambda Function should run in the VPC. | list(string) | false |  
  vpc_subnet_ids | List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets. | list(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

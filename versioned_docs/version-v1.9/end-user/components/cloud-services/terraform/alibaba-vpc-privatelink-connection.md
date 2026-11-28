@@ -20,7 +20,7 @@ Terraform-based for creating VPC networks in AliCloud and creating private netwo
  vpc_privatelink_endpoint_service_description | The description of the VPC privatelink service. | string | false |  
  vpc_security_group_description | The security group description of the VPC. | string | false |  
  vpc_security_group_name | The security group name of the VPC. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

@@ -21,7 +21,7 @@ Bridgecrew READ ONLY integration module
  org_name | The name of the company the integration is for. Must be alphanumeric. | string | true |  
  role_name | The name for the Bridgecrew read-only IAM role. | string | false |  
  topic_name | The name of the SNS topic for Bridgecrew to receive notifications. This value should not typically be modified, but is provided here to support testing and troubleshooting, if needed. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

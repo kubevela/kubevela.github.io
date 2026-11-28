@@ -24,7 +24,7 @@ Create RAM User instances on AliCloud based on Terraform module.
  reader_name_regex | A regex string to filter resulting policies by name. | string | false |  
  region | (Deprecated from version 1.3.0)The region used to launch this module resources. | string | false |  
  secret_file | A file used to store access key and secret key of ther user. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

@@ -19,7 +19,7 @@ GCP Dns-Module
  project |  |  | true |  
  region |  |  | false |  
  service_account_file |  |  | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone |  |  | false |  
 
 

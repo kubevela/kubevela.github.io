@@ -32,7 +32,7 @@ spec:
  bucket | OSS bucket name | string | false |
  endpoint | OSS bucket endpoint | string | true |
  static_web_url | The URL of the static website | string | false |
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |
 
 
 #### writeConnectionSecretToRef

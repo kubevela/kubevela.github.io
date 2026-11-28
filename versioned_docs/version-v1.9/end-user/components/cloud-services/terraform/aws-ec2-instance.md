@@ -64,7 +64,7 @@ Terraform module which creates EC2 instance(s) on AWS
  user_data_base64 | Can be used instead of user_data to pass base64-encoded binary data directly. Use this instead of user_data whenever the value is not a valid UTF-8 string. For example, gzip-encoded user data must be base64-encoded and passed via this argument to avoid corruption. | string | false |  
  volume_tags | A mapping of tags to assign to the devices created by the instance at launch time | map(string) | false |  
  vpc_security_group_ids | A list of security group IDs to associate with | list(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

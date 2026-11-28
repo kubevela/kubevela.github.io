@@ -26,7 +26,7 @@ Terraform configuration for Alibaba Cloud AMQP(RabbitMQ).
  period | The specification of the period. Valid values: 1, 12, 2, 24, 3, 6. | number | false |  
  queue_capacity | The specification of the queue capacity. The smallest value is 50 and the step size 5. | number | false |  
  support_eip | The specification of support EIP. | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

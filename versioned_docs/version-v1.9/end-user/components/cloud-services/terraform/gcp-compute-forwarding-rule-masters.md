@@ -20,7 +20,7 @@ Creates an GCP forwarding rule for DC/OS masters
  masters_self_link | List of master instances self links | list | false |  
  name_format | printf style format for naming the ELB. Gets truncated to 32 characters. (input cluster_name) |  | false |  
  name_prefix | Name Prefix |  | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

@@ -17,7 +17,7 @@ Terraform module which creates IAM resources on AWS
  group_users | List of IAM users to have in an IAM group which can assume the role | list(string) | false |  
  name | Name of IAM policy and IAM group | string | true |  
  tags | A map of tags to add to all resources. | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

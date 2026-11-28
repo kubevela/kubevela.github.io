@@ -20,7 +20,7 @@ Get your container running, simply.
  sourcezip | The Source zip file payload for app engine | string | true |  
  storage_class |  |  | false |  
  versioning | Switch for versioning | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

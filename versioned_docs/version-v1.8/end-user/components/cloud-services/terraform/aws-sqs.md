@@ -31,7 +31,7 @@ Terraform module which creates SQS resources on AWS
  redrive_policy | The JSON policy to set up the Dead Letter Queue, see AWS docs. Note: when specifying maxReceiveCount, you must specify it as an integer (5), and not a string ("5") | string | false |  
  tags | A mapping of tags to assign to all resources | map(string) | false |  
  visibility_timeout_seconds | The visibility timeout for the queue. An integer from 0 to 43200 (12 hours) | number | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

@@ -39,7 +39,7 @@ archive_file = {
  source_dir | Path of the directory which shall be packed as code of the Lambda function. Conflicts with `archive_file`. | string | false |  
  tags | Tags which will be assigned to all resources. | map(string) | false |  
  timeout | The amount of time (in seconds) per execution before stopping it. | number | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

@@ -21,7 +21,7 @@ Create an ILB to be used for DC/OS for GCP
  project_id | project id |  | true |  
  region | region |  | true |  
  target_pool | Target Pool |  | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

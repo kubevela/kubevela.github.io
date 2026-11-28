@@ -20,7 +20,7 @@ Terraform files for deploying docker-openwisp infrastructure in Google Cloud.
  google_services | Google Cloud services configuration. See [documentation](https://github.com/atb00ker/terraform-gcp-openwisp/blob/master/docs/input.md) for details. | `map(any)` | true |  
  network_config | Network configuration for OpenWISP. See [documentation](https://github.com/atb00ker/terraform-gcp-openwisp/blob/master/docs/input.md) for details. | `map(any)` | true |  
  openwisp_services | OpenWISP services configuration. See [documentation](https://github.com/atb00ker/terraform-gcp-openwisp/blob/master/docs/input.md) for details. | `map(bool)` | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

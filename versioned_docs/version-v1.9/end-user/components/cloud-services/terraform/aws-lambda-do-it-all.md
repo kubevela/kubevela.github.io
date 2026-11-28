@@ -41,7 +41,7 @@ Terraform module to provision a lambda with full permissions
  tracing_config_mode | X Ray tracing mode to use | string | false |  
  vpc_security_groups | VPC security groups to apply to the lambda | list(string) | false |  
  vpc_subnets | VPC subnets to run the lambda in | list(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

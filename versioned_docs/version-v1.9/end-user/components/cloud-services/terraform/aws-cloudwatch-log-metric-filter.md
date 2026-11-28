@@ -21,7 +21,7 @@ Terraform module which creates Cloudwatch resources on AWS
  metric_transformation_value | What to publish to the metric. For example, if you're counting the occurrences of a particular term like 'Error', the value will be '1' for each occurrence. If you're counting the bytes transferred the published value will be the value in the log event. | string | false |  
  name | A name for the metric filter. | string | true |  
  pattern | A valid CloudWatch Logs filter pattern for extracting metric data out of ingested log events. | string | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

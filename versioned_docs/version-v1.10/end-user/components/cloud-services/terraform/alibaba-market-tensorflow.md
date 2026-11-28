@@ -35,7 +35,7 @@ Based on Terraform module, create ECS instances on Ali cloud to achieve one-clic
  system_disk_size | The system disk size used to launch ecs instance. | number | false |  
  tags | A mapping of tags to assign to the ECS. | map(string) | false |  
  vswitch_id | The virtual switch ID to launch ECS instance in VPC. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

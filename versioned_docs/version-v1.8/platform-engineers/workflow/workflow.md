@@ -4,7 +4,7 @@ slug: /platform-engineers/workflow/workflow
 ---
 
 :::tip
-Before reading this section, make sure you have understood the concept of [WorkflowStepDefinition](../oam/x-definition.md#WorkflowStepDefinition) in KubeVela and learned the [basic knowledge of CUE](../cue/basic.md).
+Before reading this section, make sure you have understood the concept of [WorkflowStepDefinition](../oam/x-definition.md#workflowstepdefinition) in KubeVela and learned the [basic knowledge of CUE](../cue/basic.md).
 :::
 
 

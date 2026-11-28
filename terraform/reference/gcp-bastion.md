@@ -28,7 +28,7 @@ Bastion for GCP
  service_scope |  | list(any) | false |  
  source_cidrs | The ranges to allow to connect to the bastion | list(any) | true |  
  tags | Hard-coded tags that associates the correct firewall to the instance | list(any) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone | The GCP zone | string | true |  
 
 

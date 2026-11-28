@@ -15,7 +15,7 @@ Terraform-based module supports creating access control lists for load balancers
 | ip_version | The IP Version of access control list. Valid values: `ipv4` or `ipv6`. Default is `ipv4`. | `string` | false | `"ipv4"` |
 | name | The name of the access control list. | `string` | false | |
 | region | (Deprecated from version 1.2.0) The region used to launch this module resources. | `string` | false | |
-| writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false | |
+| writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false | |
 
 
 #### writeConnectionSecretToRef

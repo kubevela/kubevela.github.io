@@ -20,7 +20,7 @@ Kubernetes Cluster On GCP with Terraform
  number_of_worker |  |  | false |  
  project |  |  | false |  
  region |  |  | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zones |  | list | false |  
 
 

@@ -27,7 +27,7 @@ Terraform gcp memorystore redis example
  region | gcp region to use |  | false |  
  reserved_ip_range | the CIDR range of internal addresses that are reserved for this instance |  | false |  
  tier | the service tier of the instance |  | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

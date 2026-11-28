@@ -118,7 +118,7 @@ Terraform module which creates EMR on AWS
  use_existing_service_access_security_group | If set to `true`, will use variable `service_access_security_group` using an existing security group that was created outside of this module | bool | false |  
  visible_to_all_users | Whether the job flow is visible to all IAM users of the AWS account associated with the job flow | bool | false |  
  vpc_id | VPC ID to create the cluster in (e.g. `vpc-a22222ee`) | string | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone_id | Route53 parent zone ID. If provided (not empty), the module will create sub-domain DNS records for the masters and slaves | string | false |  
 
 

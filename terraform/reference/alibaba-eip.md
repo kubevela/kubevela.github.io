@@ -47,7 +47,7 @@ spec:
  skip_region_validation | (Deprecated from version 1.2.0) Skip static validation of region ID. Used by users of alternative AlibabaCloud-like APIs or users w/ access to regions that are not public (yet). | bool | false |  
  tags | A mapping of tags to assign to the EIP instance resource. | map(string) | false |  
  use_num_suffix | Always append numerical suffix to instance name, even if number_of_instances is 1. | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 ### Instance Schema
 

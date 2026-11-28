@@ -20,7 +20,7 @@ A module to create a private database setup
  project | The name of the GCP project | `string` | true |  
  require_ssl | Require SSL connections or not | `bool` | false |  
  users | A list of users that belong to a database instance. Example: `[{name: 'user1', password: 'secret'}]` | `list(object({\n    name     = string\n    password = string\n  }))` | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

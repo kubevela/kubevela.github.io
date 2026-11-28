@@ -25,7 +25,7 @@ Terraform module which creates IAM resources on AWS
  require_numbers | Whether to require numbers for user passwords | bool | false |  
  require_symbols | Whether to require symbols for user passwords | bool | false |  
  require_uppercase_characters | Whether to require uppercase characters for user passwords | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

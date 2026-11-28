@@ -51,7 +51,7 @@ spec:
  resource_group_name | Name of resource group. Defaults to 'rsg'. | string | false |  
  static_website | Static website configuration. Defaults to disabled. | list(map(string)) | false |  
  tags | Tags for storage account. Defaults to '{}'. | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

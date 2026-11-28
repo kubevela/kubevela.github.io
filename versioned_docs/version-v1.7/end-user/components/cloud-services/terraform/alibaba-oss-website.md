@@ -36,7 +36,7 @@ spec:
  bucket | OSS bucket name. | string | false |  
  error_document | OSS bucket static website error document. | string | false |  
  index_document | OSS bucket static website index document. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

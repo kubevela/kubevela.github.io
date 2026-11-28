@@ -19,7 +19,7 @@ Terraform configuration for Alibaba Cloud RocketMQ.
  ons_topic_remark | The specification of ons topic remark. | string | false |  
  perm | The permission of MQ topic. | string | false |  
  topic | The specification of ons topic name. Two topics on a single instance cannot have the same name and the name cannot start with 'GID' or 'CID'. The length cannot exceed 64 characters. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

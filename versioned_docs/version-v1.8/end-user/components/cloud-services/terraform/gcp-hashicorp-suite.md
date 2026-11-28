@@ -29,7 +29,7 @@ Terraform module to run Nomad on Google Cloud
  nomad_region | Default datacenter for Nomad |  | false |  
  nomad_version | Nomad version to install |  | true |  
  vpc_id | Name of the network to attach instances to |  | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone | Zone to launch instances into |  | true |  
 
 

@@ -175,8 +175,8 @@ spec:
 | secretRef      | optional, Save the name of a Secret, which is the credential to read the bucket. Secret contains accesskey and secretkey fields                       | sec-name                    |
 | timeout        | optional, The timeout period of the download operation, the default is 20s                                                                            | 60s                         |
 | path           | required, The directory containing the kustomization.yaml file, or the directory containing a set of YAML files (used to generate kustomization.yaml) | ./prod                      |
-| oss            | optional, The [oss](#OSS) source configuration                                                                                                        |                             |
-| git            | optional, The [git](#OSS) source configuration                                                                                                        |                             |
+| oss            | optional, The [oss](#oss) source configuration                                                                                                        |                             |
+| git            | optional, The [git](#oss) source configuration                                                                                                        |                             |
 | imageRepository| optional, The image [repository](#Image Repository) for automatically update image to git                                                             |                             |
 
 ##### Image Repository
@@ -186,7 +186,7 @@ spec:
 | image     | required     | The image url                                                                                                                                                 | oamdev/vela-core                                             |
 | secretRef     | optional     | If it's a private image registry, use `kubectl create secret docker-registry` to create the secret                                                                                                                                                 | my-secret                                             |
 | policy        | optional     | [Policy](#Image policy) gives the particulars of the policy to be followed in selecting the most recent image.        |
-| filterTags    | optional      | [FilterTags](#FilterTags) enables filtering for only a subset of tags based on a set of rules. If no rules are provided, all the tags from the repository will be ordered and compared.                                                                                                                       | $timestamp                                             |
+| filterTags    | optional      | [FilterTags](#filtertags) enables filtering for only a subset of tags based on a set of rules. If no rules are provided, all the tags from the repository will be ordered and compared.                                                                                                                       | $timestamp                                             |
 | commitMessage     | optional      | Use for more commit message
 
 

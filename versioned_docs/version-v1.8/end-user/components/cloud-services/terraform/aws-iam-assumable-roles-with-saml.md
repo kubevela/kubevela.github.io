@@ -36,7 +36,7 @@ Terraform module which creates IAM resources on AWS
  readonly_role_permissions_boundary_arn | Permissions boundary ARN to use for readonly role | string | false |  
  readonly_role_policy_arns | List of policy ARNs to use for readonly role | list(string) | false |  
  readonly_role_tags | A map of tags to add to readonly role resource. | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

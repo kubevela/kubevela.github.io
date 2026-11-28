@@ -19,7 +19,7 @@ For your cloud functions to GCP
  project | GCP project | string | true |  
  region | GCP region | string | true |  
  sourcezippath | Full path to source zip file  | string | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

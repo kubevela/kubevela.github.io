@@ -27,7 +27,7 @@ Terraform module which creates IAM resources on AWS
  ssh_public_key | The SSH public key. The public key must be encoded in ssh-rsa format or PEM format | string | false |  
  tags | A map of tags to add to all resources. | map(string) | false |  
  upload_iam_user_ssh_key | Whether to upload a public ssh key to the IAM user | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

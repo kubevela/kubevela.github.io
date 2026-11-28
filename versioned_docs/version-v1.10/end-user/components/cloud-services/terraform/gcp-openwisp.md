@@ -20,7 +20,7 @@ Terraform files for deploying docker-openwisp infrastructure in Google Cloud.
  google_services | Find documentation here: https://github.com/atb00ker/terraform-gcp-openwisp/blob/master/docs/input.md | `object({service_account = string, project_id = string, region = string, zone = string, common_resource_description = string, configure_gloud = bool, disable_apis_on_destroy = bool, use_cloud_sql = bool, use_cloud_dns = bool})` | true |  
  network_config | Find documentation here: https://github.com/atb00ker/terraform-gcp-openwisp/blob/master/docs/input.md | `object({vpc_name = string, subnet_cidr = string, pods_cidr_range = string, services_cidr_range = string, http_loadbalancer_ip_name = string, openvpn_ip_name = string, freeradius_ip_name = string, openwisp_dns_zone_name = string, openwisp_dns_name = string, openwisp_dns_records_ttl = number, subnet_flowlogs = object({enable = bool, interval = string, sampling = number, metadata = string})})` | true |  
  openwisp_services | Find documentation here: https://github.com/atb00ker/terraform-gcp-openwisp/blob/master/docs/input.md | `object({use_openvpn = bool, use_freeradius = bool, setup_database = bool, setup_fresh = bool})` | true |
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

@@ -66,7 +66,7 @@ Build VPC and Nat gateway network environment and bind EIP, add SNAT and DNAT en
  vswitch_ids | A list of virtual switch IDs to launch in. | list(string) | false |  
  vswitch_name | The vswitch name prefix used to launch several new vswitches. | string | false |  
  vswitch_tags | The tags used to launch serveral vswitches. | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

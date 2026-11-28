@@ -44,7 +44,7 @@ Terraform module which creates SNS topic and Lambda function which sends notific
  sns_topic_tags | Additional tags for the SNS topic | map(string) | false |  
  subscription_filter_policy | (Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource. | string | false |  
  tags | A map of tags to add to all resources | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

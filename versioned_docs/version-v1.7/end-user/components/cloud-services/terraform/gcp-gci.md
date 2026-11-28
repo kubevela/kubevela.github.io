@@ -19,7 +19,7 @@ Manages GCP compute engine instance
  project_name | The project name used by metadata_startup_script | string | false |  
  ssh_public_key | Public SSH key to be added to authorized_keys | string | true |  
  subnetwork | The name or self_link of the subnetwork to attach this instance network interface to. | string | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone | Instance availability zone | string | true |  
 
 

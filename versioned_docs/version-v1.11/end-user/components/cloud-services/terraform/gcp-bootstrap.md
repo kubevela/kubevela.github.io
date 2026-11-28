@@ -29,7 +29,7 @@ Create a DC/OS Bootstrap instance and have conditional DC/OS prereqs for gcp
  ssh_user | SSH User |  | true |  
  tags | Add custom tags to all resources | list | false |  
  user_data | User data to be used on these instances (cloud-init) |  | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone_list | Element by zone list | list | false |  
 
 

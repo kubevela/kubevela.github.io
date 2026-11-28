@@ -24,7 +24,7 @@ Terraform module which creates IAM resources on AWS
  path | The path of the policy in IAM | string | false |  
  tags | A map of tags to add to all resources. | map(string) | false |  
  web_console_services | List of web console services to allow | list(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

@@ -16,7 +16,7 @@ Terraform module which creates EC2 key pair on AWS
  key_name_prefix | Creates a unique name beginning with the specified prefix. Conflicts with key_name. | string | false |  
  public_key | The public key material. | string | false |  
  tags | A map of tags to add to key pair resource. | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

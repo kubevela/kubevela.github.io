@@ -15,7 +15,7 @@ Azure Resource Group
  ------------ | ------------- | ------------- | ------------- | ------------- 
  location | The location of the resource group | string | false |  
  name | The name of the resource group | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

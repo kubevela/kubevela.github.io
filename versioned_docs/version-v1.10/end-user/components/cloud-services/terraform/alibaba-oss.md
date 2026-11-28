@@ -31,7 +31,7 @@ spec:
  ------------ | ------------- | ------------- | ------------- | ------------- 
  acl | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write'. | string | false |  
  bucket | OSS bucket name. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

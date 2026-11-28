@@ -18,7 +18,7 @@ To enable Authentication & Authorization in your KubeVela system, you need to do
   helm upgrade --install kubevela kubevela/vela-core --create-namespace -n vela-system --set authentication.enabled=true --set authentication.withUser=true --wait
   ```
 
-3. Make sure your version Vela CLI v1.4.1+, refer to [the installation guide](../../install.mdx#2-install-kubevela-cli).
+3. Make sure your version Vela CLI v1.4.1+, refer to [the installation guide](../../installation/kubernetes.mdx#install-vela-cli).
 
 4. (Optional) Install [vela-prism](https://github.com/kubevela/prism) through running the following commands, which will allow you to enjoy the advanced API extensions in KubeVela.
   ```bash
@@ -30,7 +30,7 @@ To enable Authentication & Authorization in your KubeVela system, you need to do
 
 ## Usage
 
-0. Before we start, assume we already have two managed clusters joined in KubeVela, called `c2` and `c3`. You can refer to the [multi-cluster document](../system-operation/managing-clusters.md#manage-the-cluster-via-cli) and see how to join managed clusters into KubeVela control plane.
+0. Before we start, assume we already have two managed clusters joined in KubeVela, called `c2` and `c3`. You can refer to the [multi-cluster document](../system-operation/managing-clusters.md#join-clusters) and see how to join managed clusters into KubeVela control plane.
 
 ```bash
 $ vela cluster list

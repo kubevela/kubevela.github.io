@@ -83,7 +83,7 @@ mv kustomize ~/kubevela/bin/
 
 </details>
 
-* ginkgo 1.14.0+ (just for [E2E test](#e2e-test))
+* ginkgo 1.14.0+ (just for [E2E test](#integration-and-e2e-test))
   ```
   go install github.com/onsi/ginkgo/v2/ginkgo@latest
   ```
@@ -250,7 +250,7 @@ To run vela-core locally for debugging with kubevela installed in the remote clu
   kubectl delete MutatingWebhookConfiguration kubevela-vela-core-admission -n vela-system
   ```
 
-Finally, you can use the commands in the above [Build](#build) and [Testing](#Testing) sections, such as `make run`, to code and debug in your local machine.
+Finally, you can use the commands in the above [Build](#build) and [Testing](#testing) sections, such as `make run`, to code and debug in your local machine.
 
 :::caution
 Note you will not be able to test features relate with validating/mutating webhooks in this way.
@@ -325,7 +325,7 @@ If this is your first time contributing to an open-source project on GitHub, mak
 To increase the chance of having your pull request accepted, make sure your pull request follows these guidelines:
 
 - Title and description matches the implementation.
-- Commits within the pull request follow the [Formatting guidelines](#Formatting-guidelines).
+- Commits within the pull request follow the [Formatting guidelines](#formatting-guidelines).
 - The pull request closes one related issue.
 - The pull request contains necessary tests that verify the intended behavior.
 - If your pull request has conflicts, rebase your branch onto the main branch.

@@ -17,7 +17,7 @@ title:  Gcp-Subnet
  name | Subnet name |  | true |  
  subnet-region | Zone associated with the subnet. Defaults to the region configured in the provider. |  | false |  
  vpc | VPC to link the subnet to |  | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

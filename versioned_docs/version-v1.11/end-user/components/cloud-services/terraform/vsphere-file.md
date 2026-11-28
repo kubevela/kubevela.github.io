@@ -38,7 +38,7 @@ spec:
  source_datacenter | The name of a datacenter from which the file will be copied. | string | false |
  source_datastore | The name of the datastore from which file will be copied. | string | false |
  source_file | The path to the file being uploaded from the Terraform host to the vSphere environment or copied within vSphere environment. | string | false |
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |
 
 
 #### writeConnectionSecretToRef

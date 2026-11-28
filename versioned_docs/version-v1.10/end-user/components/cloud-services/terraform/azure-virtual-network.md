@@ -19,7 +19,7 @@ Azure Virtual Network
  resource_group_name | The name of an existing resource group to be imported. | string | true |  
  tags | The tags to associate with your network and subnets. | map(string) | false |  
  vnet_name | Name of the vnet to create. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

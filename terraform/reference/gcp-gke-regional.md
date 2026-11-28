@@ -28,7 +28,7 @@ Using Terraform to create a regional GKE cluster (Hosted Kubernetes offering of 
  node_pools | All variables regarding nodes are expressed here |  | false |  
  region | Region where the cluster will be deployed |  | true |  
  subnetwork | Name of the sub-network in which the cluster will be sitting |  | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

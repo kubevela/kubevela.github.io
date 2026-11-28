@@ -33,7 +33,7 @@ spec:
  account_name | Redis instance user account name. | string | false |  
  instance_name | Redis instance name. | string | false |  
  password | RDS instance account password. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

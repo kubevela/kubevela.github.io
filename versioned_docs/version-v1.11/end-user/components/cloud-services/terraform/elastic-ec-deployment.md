@@ -33,7 +33,7 @@ spec:
  deployment_template_id | Deployment template identifier to create the deployment from, full list: https://www.elastic.co/guide/en/cloud/current/ec-regions-templates-instances.html. | string | false |
  name | Name of the deployment. | string | false |
  region | Elasticsearch Service region, full list: https://www.elastic.co/guide/en/cloud/current/ec-regions-templates-instances.html. | string | false |
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |
 
 
 #### writeConnectionSecretToRef
