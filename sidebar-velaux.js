@@ -63,7 +63,7 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Developer Onboarding',
+      label: 'Contributor Onboarding',
       link: {type: 'generated-index', slug: '/developer'},
       items: ['developer/overview', 'developer/run-locally', 'developer/testing', 'developer/pull-requests'],
     },

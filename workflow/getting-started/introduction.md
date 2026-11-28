@@ -25,7 +25,7 @@ The `webhook` and `request` steps and the HTTP channels of the `notification` st
 | Delivering an Application with KubeVela, and want approval gates, ordering or notifications | [Quick Start: in an Application](quick-start.md#in-an-application), then the [Guides](/workflow/next/guides) |
 | Running a pipeline that isn't one Application: a release across several, a batch of Jobs, an HTTP check | [Install](install.md) the `vela-workflow` controller, then the [Quick Start](quick-start.md) |
 | A platform engineer adding step types of your own | [Steps, Workflows and WorkflowRuns](../concepts/workflow-model.md), then [Workflow Step Definition](../guides/authoring/step-definition.md) |
-| Building on the engine in Go, or contributing to it | [Developer Onboarding](../developer-onboarding/overview.md) |
+| Building on the engine in Go, or contributing to it | [Contributor Onboarding](../developer-onboarding/overview.md) |
 
 ## How it relates to KubeVela
 

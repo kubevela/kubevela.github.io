@@ -1,5 +1,5 @@
 // Sidebar for the Cluster Gateway section (/cluster-gateway), in the same shape as the KubeVela docs: Getting Started,
-// Concepts, Guides, Examples, Operate, Developer Onboarding and Reference. KubeVela's multi-cluster pages stay in the
+// Concepts, Guides, Examples, Operate, Contributor Onboarding and Reference. KubeVela's multi-cluster pages stay in the
 // KubeVela docs.
 const category = (label, slug, description, items) => ({
   type: 'category',
@@ -36,7 +36,7 @@ module.exports = {
       'operate/upgrade',
       'operate/troubleshooting',
     ]),
-    category('Developer Onboarding', '/developer', 'Working on the cluster-gateway repository: building, running, testing and getting a change merged.', [
+    category('Contributor Onboarding', '/developer', 'Working on the cluster-gateway repository: building, running, testing and getting a change merged.', [
       'developer/overview',
       'developer/build-and-run',
       'developer/testing',

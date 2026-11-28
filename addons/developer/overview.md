@@ -1,5 +1,5 @@
 ---
-title: Developer Onboarding
+title: Contributor Onboarding
 ---
 
 This part of the docs is for writing addons: your own, for your platform, or one for the community catalog, [kubevela/catalog](https://github.com/kubevela/catalog). An addon is a directory of files, not a program, so there's no build step. You write it, enable it from the directory on a test cluster, and once it works you publish it to a registry or open a pull request against the catalog.

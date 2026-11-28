@@ -1,5 +1,5 @@
 // Sidebar for the Prism section (/prism), in the same shape as the KubeVela docs: Getting Started, Concepts, Guides,
-// Examples, Operate, Developer Onboarding and Reference. The addon's own page stays in the Addons section.
+// Examples, Operate, Contributor Onboarding and Reference. The addon's own page stays in the Addons section.
 const category = (label, slug, description, items) => ({
   type: 'category',
   label,
@@ -35,7 +35,7 @@ module.exports = {
       'operate/upgrade',
       'operate/troubleshooting',
     ]),
-    category('Developer Onboarding', '/developer', 'Working on the prism repository: building, running, testing and getting a change merged.', [
+    category('Contributor Onboarding', '/developer', 'Working on the prism repository: building, running, testing and getting a change merged.', [
       'developer/overview',
       'developer/build-and-run',
       'developer/testing',

@@ -36,7 +36,7 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Developer Onboarding',
+      label: 'Contributor Onboarding',
       collapsed: true,
       link: {type: 'doc', id: 'developer/overview'},
       items: [

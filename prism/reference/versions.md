@@ -24,6 +24,6 @@ The same table, with the other products' versions, is in the [release notes over
 | v1.6.0 | October 2022 | Request timeout flags, the `control-plane` label on clusters. The newest published chart. Its arm64 image crashes. |
 | v1.5.0 | July 2022 | The addon's image until June 2023. |
 
-`master` has moved on since v1.7.0 (Go 1.27.1, Kubernetes 0.37 libraries, `k8s.io/apiserver` in place of `apiserver-runtime`) without a release, and doesn't start with the arguments today's addon and chart pass: see [Developer Onboarding](../developer/overview.md#reviews-and-releases).
+`master` has moved on since v1.7.0 (Go 1.27.1, Kubernetes 0.37 libraries, `k8s.io/apiserver` in place of `apiserver-runtime`) without a release, and doesn't start with the arguments today's addon and chart pass: see [Contributor Onboarding](../developer/overview.md#reviews-and-releases).
 
 Upgrade notes for each step are on [Upgrade](../operate/upgrade.md#what-changed).
