@@ -493,5 +493,48 @@
   },
   "home.toolkit.cuex.body": {
     "message": "CueX 让定义突破模板的边界。内置包可以读取并操作 Kubernetes API，你自己的服务也能以包的形式加入：只需描述一次服务，所有定义都能调用它，由 CueX 转发请求并返回响应。"
+  },
+  "docs.reportProblem.toggle": {
+    "message": "报告此页面的问题",
+    "description": "The link at the foot of a docs page that opens the problem report panel"
+  },
+  "docs.reportProblem.heading": {
+    "message": "此页面有什么问题？"
+  },
+  "docs.reportProblem.categoryLabel": {
+    "message": "问题类型"
+  },
+  "docs.reportProblem.category.outdated": {
+    "message": "内容过时"
+  },
+  "docs.reportProblem.category.inaccurate": {
+    "message": "内容不准确"
+  },
+  "docs.reportProblem.category.unclear": {
+    "message": "表述不清楚"
+  },
+  "docs.reportProblem.category.example": {
+    "message": "示例无法运行"
+  },
+  "docs.reportProblem.category.broken": {
+    "message": "链接或图片失效"
+  },
+  "docs.reportProblem.category.other": {
+    "message": "其他"
+  },
+  "docs.reportProblem.noteLabel": {
+    "message": "详细说明（可选）"
+  },
+  "docs.reportProblem.notePlaceholder": {
+    "message": "哪个章节，你期望看到什么，实际看到了什么"
+  },
+  "docs.reportProblem.hint": {
+    "message": "这会在 GitHub 上新建一个 issue，并预先填好这些信息。提交前你可以再检查一遍。"
+  },
+  "docs.reportProblem.submit": {
+    "message": "在 GitHub 上创建 issue"
+  },
+  "docs.reportProblem.cancel": {
+    "message": "取消"
   }
 }

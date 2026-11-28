@@ -59,7 +59,8 @@ func checkComponentDocsPropertiesSort(dirpath string) error {
 		return err
 	}
 	for _, file := range files {
-		if !strings.HasSuffix(file.Name(), ".md") {
+		// The cloud resource list is the one page in the folder that isn't a generated component page.
+		if !strings.HasSuffix(file.Name(), ".md") || file.Name() == "cloud-resources-list.md" {
 			continue
 		}
 		path := filepath.Join(dirpath, file.Name())
@@ -100,7 +101,7 @@ func main() {
 	}
 
 	componentDocsFolders := [4]string{
-		"./docs/end-user/components/cloud-services/terraform",
+		"./terraform/reference",
 		"./versioned_docs/" + latestVersion + "/end-user/components/cloud-services/terraform",
 		"./i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/cloud-services/terraform",
 		"./i18n/zh/docusaurus-plugin-content-docs/" + latestVersion + "/end-user/components/cloud-services/terraform",

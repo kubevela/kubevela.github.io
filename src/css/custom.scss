@@ -640,6 +640,25 @@ html:not([data-kv-call='on']) div[class*='announcementBar_']:has(.kv-ann-only-ca
   }
 }
 
+/* The phone menu lists each product's versions under the product, so the
+   navbar's version dropdowns are left out of it, and the announcement bar is
+   left out of the phone layout. */
+@media (max-width: 996px) {
+  .navbar-sidebar .menu__list-item:has(> .menu__list-item-collapsible > .kv-version),
+  .navbar-sidebar .menu__list-item:has(> .menu__list-item-collapsible > .workflow-version-dropdown) {
+    display: none;
+  }
+
+  div[class*='announcementBar_'] {
+    display: none;
+  }
+}
+
+/* A product's versions sit indented under it, in the sidebar's link style. */
+.kv-product-versions {
+  padding-left: 2rem;
+}
+
 /* On a phone the announcement drops the star link and its extra words. These
    follow the rules above so they take precedence. */
 @media (max-width: 600px) {
@@ -1147,4 +1166,36 @@ summary:focus-visible,
 .plugin-id-videos .markdown blockquote {
   color: var(--kv-muted);
   border-left-color: var(--kv-line);
+}
+
+// The version dropdown lists KubeVela's versions, so it has no meaning on an unversioned section. Each rule
+// names the navbar item (desktop) and the mobile menu's list item, since the dropdown's class sits on the
+// link inside either.
+html.plugin-id-addons,
+html.plugin-id-terraform,
+html.plugin-id-workflow,
+html.plugin-id-velaux,
+html.plugin-id-cluster-gateway,
+html.plugin-id-prism {
+  .navbar__item:has(> .kv-version),
+  .menu__list-item:has(> .menu__list-item-collapsible > .kv-version) {
+    display: none;
+  }
+}
+// Workflow has versions of its own, which mean nothing outside its section.
+html:not(.plugin-id-workflow) {
+  .navbar__item:has(> .workflow-version-dropdown),
+  .menu__list-item:has(> .menu__list-item-collapsible > .workflow-version-dropdown) {
+    display: none;
+  }
+}
+
+// Section icons in the Documentation menu (section-icons.js).
+.dropdown__link .section-icon,
+.menu__link .section-icon {
+  flex-shrink: 0;
+  // The details stay in the text colour, like the logo's hull, on the active item too.
+  color: var(--ifm-font-color-base);
+  margin-right: 0.5rem;
+  vertical-align: -0.2em;
 }

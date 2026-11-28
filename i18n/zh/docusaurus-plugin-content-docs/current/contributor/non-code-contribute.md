@@ -40,6 +40,9 @@ title: 非代码贡献手册
 
 ## 文档贡献
 
+发现文档页面有问题？点击页面底部的 **报告此页面的问题**。它会新建一个[文档问题](https://github.com/kubevela/kubevela.github.io/issues/new?template=docs-problem.yml) issue，并预先填好页面、版本和问题类型，维护者通过 [`type/docs`](https://github.com/kubevela/kubevela.github.io/labels/type%2Fdocs) 标签对这些 issue 进行分类处理。
+
+
 贡献文档需要学习关于如何在 Github 上提出 pull request 的知识。可以遵循以下手册，这不会很困难。
 
 * [kubevela.io 开发者手册](https://github.com/kubevela/kubevela.io/blob/main/README.md)

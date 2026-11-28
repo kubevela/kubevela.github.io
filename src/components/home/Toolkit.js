@@ -179,7 +179,7 @@ export default function Toolkit() {
           use them.
         </Translate>
       ),
-      to: 'docs/end-user/components/cloud-services/cloud-resource-scenarios',
+      to: 'terraform/getting-started/introduction',
       Diagram: InfraDiagram,
     },
     {
@@ -190,7 +190,7 @@ export default function Toolkit() {
           cluster it runs on.
         </Translate>
       ),
-      to: 'docs/reference/addons/velaux',
+      to: 'velaux/getting-started/introduction',
       Diagram: HealthDiagram,
     },
     {
@@ -201,7 +201,7 @@ export default function Toolkit() {
           traits, policies and workflow steps for GitOps, cloud resources, observability or capabilities of your own.
         </Translate>
       ),
-      to: 'docs/reference/addons/overview',
+      to: 'addons/overview',
       Diagram: AddonsDiagram,
     },
     {

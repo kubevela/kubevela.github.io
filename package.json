@@ -5,10 +5,10 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "NODE_OPTIONS=\"--max-old-space-size=4096\" docusaurus build",
+    "build": "NODE_OPTIONS=\"--max-old-space-size=8192\" docusaurus build",
     "postbuild": "node scripts/llms-postprocess.js",
     "swizzle": "docusaurus swizzle",
-    "deploy": "NODE_OPTIONS=\"--max-old-space-size=4096\" docusaurus deploy",
+    "deploy": "NODE_OPTIONS=\"--max-old-space-size=8192\" docusaurus deploy",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",

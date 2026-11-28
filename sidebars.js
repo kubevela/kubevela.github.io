@@ -81,23 +81,7 @@ const sidebars = {
           label: 'Cloud Resources CD',
           collapsed: true,
           items: [
-            'tutorials/consume-cloud-services',
-            {
-              type: 'category',
-              label: 'Terraform',
-              collapsed: true,
-              link: {
-                type: 'doc',
-                id: 'end-user/components/cloud-services/cloud-resource-scenarios',
-              },
-              items: [
-                'end-user/components/cloud-services/provision-and-consume-database',
-                'end-user/components/cloud-services/provision-and-initiate-database',
-                'end-user/components/cloud-services/secure-your-database-connection',
-                'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database',
-                'end-user/components/cloud-services/provision-instance-and-database-separately',
-              ],
-            },
+            {type: 'link', label: 'Terraform', href: '/terraform/getting-started/introduction'},
             'end-user/components/cloud-services/provision-cloud-resources-by-crossplane',
           ],
         },
@@ -147,21 +131,21 @@ const sidebars = {
           },
           items: [
             'end-user/workflow/operations',
-            'end-user/workflow/suspend',
-            'end-user/workflow/step-group',
-            'end-user/workflow/for-each',
+            {type: 'link', label: 'Suspend and Resume', href: '/workflow/next/guides/steps/suspend'},
+            {type: 'link', label: 'Order Steps', href: '/workflow/next/guides/steps/order-steps'},
+            {type: 'link', label: 'Repeating Steps with forEach', href: '/workflow/next/guides/steps/for-each'},
             'end-user/workflow/component-dependency-parameter',
-            'end-user/workflow/inputs-outputs',
-            'end-user/workflow/if-condition',
-            'end-user/workflow/expressions',
-            'end-user/workflow/timeout',
+            {type: 'link', label: 'Data Passing', href: '/workflow/next/guides/steps/inputs-outputs'},
+            {type: 'link', label: 'If Conditions', href: '/workflow/next/guides/steps/if-condition'},
+            {type: 'link', label: 'Expressions in Workflow Steps', href: '/workflow/next/guides/steps/expressions'},
+            {type: 'link', label: 'Timeout of Step', href: '/workflow/next/guides/steps/timeout'},
           ],
         },
         {
           type: 'category',
           label: 'Pipeline',
           collapsed: true,
-          items: ['end-user/pipeline/workflowrun'],
+          items: [{type: 'link', label: 'WorkflowRun', href: '/workflow/next/guides/workflowrun'}],
         },
         {
           type: 'category',
@@ -177,11 +161,11 @@ const sidebars = {
           type: 'category',
           label: 'CI Integration',
           collapsed: true,
-          link: {
-            type: 'doc',
-            id: 'how-to/dashboard/trigger/overview',
-          },
-          items: ['tutorials/s2i', 'tutorials/trigger'],
+          items: [
+            'tutorials/s2i',
+            {type: 'link', label: 'Triggers in VelaUX', href: '/velaux/guides/delivery/triggers'},
+            {type: 'link', label: 'Harbor Image Registry', href: '/velaux/guides/delivery/harbor-trigger'},
+          ],
         },
         {
           'Day-2 Operations': [
@@ -190,7 +174,7 @@ const sidebars = {
             'tutorials/access-application',
             'tutorials/auto-scaler',
             'tutorials/debug-app',
-            'tutorials/cloud-shell',
+            {type: 'link', label: 'Cloud Shell', href: '/velaux/guides/applications/cloud-shell'},
             'tutorials/vela-top',
             {
               type: 'category',
@@ -259,21 +243,21 @@ const sidebars = {
             'platform-engineers/system-operation/workflow-http-protection',
           ],
         },
-        'how-to/dashboard/concepts',
         {
           type: 'category',
-          label: 'User Management',
+          label: 'VelaUX',
           collapsed: true,
-          link: {
-            type: 'doc',
-            id: 'how-to/dashboard/user/user',
-          },
-          items: ['tutorials/sso'],
+          items: [
+            {type: 'link', label: 'Concepts', href: '/velaux/concepts/overview'},
+            {type: 'link', label: 'Install', href: '/velaux/getting-started/install'},
+            {type: 'link', label: 'Users', href: '/velaux/guides/users/overview'},
+            {type: 'link', label: 'Projects', href: '/velaux/guides/users/projects'},
+            {type: 'link', label: 'SSO Login', href: '/velaux/guides/users/sso'},
+          ],
         },
-        'how-to/dashboard/user/project',
         {
           'Authentication and Authorization': [
-            'how-to/dashboard/user/rbac',
+            {type: 'link', label: 'VelaUX RBAC', href: '/velaux/guides/users/rbac'},
             'platform-engineers/auth/basic',
             'platform-engineers/auth/advance',
             'platform-engineers/auth/integration',
@@ -284,14 +268,14 @@ const sidebars = {
         {
           'Cluster Management': [
             'platform-engineers/system-operation/managing-clusters',
-            'how-to/dashboard/target/overview',
+            {type: 'link', label: 'Targets in VelaUX', href: '/velaux/guides/delivery/targets'},
             'platform-engineers/system-operation/working-with-ocm',
           ],
         },
         'platform-engineers/workflow/working-mechanism',
         {
           'UX Customization': [
-            'reference/ui-schema',
+            {type: 'link', label: 'UX of Definition', href: '/velaux/guides/extend/ui-schema'},
           ],
         },
         'platform-engineers/status/application_health_status_metrics'
@@ -310,15 +294,13 @@ const sidebars = {
           type: 'category',
           label: 'Addons',
           collapsed: true,
-          link: {
-            type: 'doc',
-            id: 'platform-engineers/addon/intro',
-          },
           items: [
-            'platform-engineers/addon/reference',
-            'platform-engineers/addon/addon-cue',
+            // Addon authoring lives in the Addons section; the topology rules apply to any workload, so they stay.
+            {type: 'link', label: 'Make Your Own Addon', href: '/addons/developer/make-your-own-addon'},
+            {type: 'link', label: 'Addon Reference', href: '/addons/developer/addon-reference'},
+            {type: 'link', label: 'Addon Application in CUE or YAML', href: '/addons/developer/addon-application'},
             'reference/topology-rule',
-            'platform-engineers/addon/addon-registry',
+            {type: 'link', label: 'Build your Own Registry', href: '/addons/developer/addon-registry'},
           ],
         },
         {
@@ -354,10 +336,7 @@ const sidebars = {
           ],
         },
         {
-          'Cloud Resources': [
-            'platform-engineers/addon/terraform',
-            'platform-engineers/components/component-terraform',
-          ],
+          'Cloud Resources': [{type: 'link', label: 'Terraform', href: '/terraform/extend/cloud-resource-component'}],
         },
         {
           'Manage Definition with Go (defkit)': [
@@ -439,7 +418,7 @@ const sidebars = {
             'platform-engineers/policy/application-scoped-policy',
             'platform-engineers/policy/policy-rollout',
             'platform-engineers/policy/policy-context-schema',
-            'platform-engineers/workflow/workflow',
+            {type: 'link', label: 'Workflow Step Definition', href: '/workflow/next/guides/authoring/step-definition'},
             'platform-engineers/traits/patch-trait',
             'platform-engineers/system-operation/velaql',
             'platform-engineers/cue/external-packages',
@@ -487,33 +466,16 @@ const sidebars = {
         'platform-engineers/workflow/cue-actions',
         {
           type: 'category',
-          label: 'Community Verified Addons',
-          link: {
-            type: 'doc',
-            id: 'reference/addons/overview',
-          },
+          label: 'Addons',
           items: [
-            'reference/addons/velaux',
-            'reference/addons/fluxcd',
-            'reference/addons/terraform',
-            'reference/addons/ai',
-            'reference/addons/traefik',
-            'reference/addons/cert-manager',
-            'reference/addons/kubevela-io',
-            'reference/addons/vegeta',
-            'reference/addons/ocm-gateway-manager-addon',
-            'reference/addons/ocm-hub-control-plane',
-            'reference/addons/vela-prism',
-            'reference/addons/flink-kubernetes-operator',
-            'reference/addons/chartmuseum',
-            'reference/addons/dex',
-            'reference/addons/trivy-operator',
+            {type: 'link', label: 'Addon catalog', href: '/addons/overview'},
+            {type: 'link', label: 'VelaUX', href: '/velaux/operate/install-options'},
           ],
         },
-        'end-user/components/cloud-services/cloud-resources-list',
+        {type: 'link', label: 'Cloud Resource List', href: '/terraform/reference/cloud-resources-list'},
         'reference/config-template',
-        'reference/user-improvement-plan',
-        'platform-engineers/openapi/overview',
+        {type: 'link', label: 'VelaUX REST API', href: '/velaux/reference/rest-api'},
+        {type: 'link', label: 'VelaUX Usage Data', href: '/velaux/reference/user-improvement-plan'},
       ],
     },
     'roadmap/README',

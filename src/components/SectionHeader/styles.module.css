@@ -1,0 +1,38 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem var(--ifm-menu-link-padding-horizontal) 0.6rem;
+  margin: 0 0.5rem;
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+
+.kicker {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+}
+
+.title:hover {
+  text-decoration: none;
+}
+
+.icon {
+  display: inline-flex;
+  color: var(--ifm-font-color-base);
+}
+
+.icon :global(.section-icon) {
+  width: 22px;
+  height: 22px;
+}

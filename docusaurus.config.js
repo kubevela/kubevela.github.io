@@ -4,9 +4,32 @@ const { fromGitHub } = require('./scripts/announcement');
 // loads. See scripts/sync-release-pages.js.
 const {syncReleasePages, releasePagesPlugin} = require('./scripts/sync-release-pages.js');
 const {SECTIONS} = require('./sidebars-releases.js');
+const {sectionItem} = require('./section-icons.js');
 syncReleasePages();
 // /docs/release-notes/..., /docs/upgrade-guides/...: the latest version's copies.
 const RELEASE_DOCS_PATH = new RegExp(`^/docs/(${SECTIONS.map((s) => s.dir).join('|')})/`);
+
+// Pages that moved from the next docs into a section of their own (written by the split tooling). Each new URL
+// redirects from its old /docs/next/ one; released versions keep their own copies, so they need none. A page moved
+// into a versioned section lands in that section's next version.
+const VERSIONED_SECTIONS = ['workflow'];
+const MOVED_FROM = Object.fromEntries(
+  Object.values(require('./moved-docs.json')).map(({section, to, from_url}) => [
+    `/${section}/${VERSIONED_SECTIONS.includes(section) ? 'next/' : ''}${to.replace(/(\/index)?\.mdx?$/, '')}`,
+    from_url,
+  ]),
+);
+// Pages moved within a section: {old URL: new URL}. A moved page redirects from its old URL and from the core URL the
+// old one was moved from, if any.
+const SECTION_REDIRECTS = require('./section-redirects.json');
+function redirectsTo(existingPath) {
+  const from = [MOVED_FROM[existingPath]];
+  for (const [oldPath, newPath] of Object.entries(SECTION_REDIRECTS)) {
+    if (newPath === existingPath) from.push(oldPath, MOVED_FROM[oldPath]);
+  }
+  const found = from.filter(Boolean);
+  return found.length ? found : undefined;
+}
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 const config = {
@@ -58,13 +81,29 @@ const config = {
         {
           type: 'docsVersionDropdown',
           position: 'right',
+          // KubeVela's versions only; hidden on the unversioned sections (custom.scss).
           className: 'kv-version',
         },
         {
-          to: 'docs/',
-          activeBasePath: 'docs',
+          type: 'docsVersionDropdown',
+          docsPluginId: 'workflow',
+          position: 'right',
+          // Workflow's versions; shown only on the Workflow section (custom.scss).
+          className: 'workflow-version-dropdown',
+        },
+        {
+          type: 'dropdown',
           label: 'Documentation',
           position: 'left',
+          items: [
+            {type: 'custom-product', docsPluginId: 'default', to: 'docs/', activeBaseRegex: '^(/zh)?/docs', html: sectionItem('default', 'KubeVela')},
+            {type: 'custom-product', to: 'addons/getting-started/introduction', activeBaseRegex: '^(/zh)?/addons', html: sectionItem('addons', 'KubeVela Addons')},
+            {type: 'custom-product', to: 'velaux/getting-started/introduction', activeBaseRegex: '^(/zh)?/velaux', html: sectionItem('velaux', 'VelaUX')},
+            {type: 'custom-product', docsPluginId: 'workflow', to: 'workflow/getting-started/introduction', activeBaseRegex: '^(/zh)?/workflow', html: sectionItem('workflow', 'Vela Workflow')},
+            {type: 'custom-product', to: 'cluster-gateway/getting-started/introduction', activeBaseRegex: '^(/zh)?/cluster-gateway', html: sectionItem('cluster-gateway', 'Cluster Gateway')},
+            {type: 'custom-product', to: 'prism/getting-started/introduction', activeBaseRegex: '^(/zh)?/prism', html: sectionItem('prism', 'Prism')},
+            {type: 'custom-product', to: 'terraform/getting-started/introduction', activeBaseRegex: '^(/zh)?/terraform', html: sectionItem('terraform', 'Terraform Controller')},
+          ],
         },
         {
           to: 'blog',
@@ -328,6 +367,98 @@ const config = {
       },
     ],
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Workflow is versioned by the engine, kubevela/workflow, not by KubeVela. next is 0.8, the engine in KubeVela
+        // 1.12; 0.7 (KubeVela 1.11) is served at /workflow/, as /docs/ serves 1.11.
+        id: 'workflow',
+        path: 'workflow',
+        routeBasePath: 'workflow',
+        sidebarPath: require.resolve('./sidebar-workflow.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+        lastVersion: '0.7',
+        versions: {
+          // The banner reads "<site title> <label>", so the label carries the product name.
+          current: {label: 'Workflow 0.8', path: 'next'},
+          '0.7': {label: 'Workflow 0.7'},
+          '0.6': {label: 'Workflow 0.6'},
+        },
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // VelaUX is versioned by its own releases, not by KubeVela's. Its one version for now is 1.9, the release the
+        // velaux addon installs; it is cut as a version when the VelaUX 1.12 docs start.
+        id: 'velaux',
+        path: 'velaux',
+        routeBasePath: 'velaux',
+        sidebarPath: require.resolve('./sidebar-velaux.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+        versions: {
+          // The banner reads "<site title> <label>", so the label carries the product name.
+          current: {label: 'VelaUX 1.9', banner: 'none'},
+        },
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Terraform follows terraform-controller and the cloud resource modules as they are now, so it is not versioned.
+        id: 'terraform',
+        path: 'terraform',
+        routeBasePath: 'terraform',
+        sidebarPath: require.resolve('./sidebar-terraform.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // The addon reference pages follow the catalog as it is now, not a KubeVela release, so they are not versioned.
+        id: 'addons',
+        path: 'addons',
+        routeBasePath: 'addons',
+        sidebarPath: require.resolve('./sidebar-addons.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Cluster Gateway is a small standalone section describing the version KubeVela's next release pins; its
+        // multi-cluster use stays in the KubeVela docs. Not versioned.
+        id: 'cluster-gateway',
+        path: 'cluster-gateway',
+        routeBasePath: 'cluster-gateway',
+        sidebarPath: require.resolve('./sidebar-cluster-gateway.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Prism, KubeVela's aggregated API extensions, describing the version the vela-prism addon runs. Not versioned.
+        id: 'prism',
+        path: 'prism',
+        routeBasePath: 'prism',
+        sidebarPath: require.resolve('./sidebar-prism.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
       '@docusaurus/plugin-client-redirects',
       {
         // Release Notes and Upgrade Guides used to be served at
@@ -337,7 +468,7 @@ const config = {
           if (RELEASE_DOCS_PATH.test(existingPath)) {
             return existingPath.slice('/docs'.length);
           }
-          return undefined;
+          return redirectsTo(existingPath.replace(/\/$/, ''));
         },
       },
     ],

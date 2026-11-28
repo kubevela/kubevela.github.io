@@ -1,0 +1,47 @@
+name: Docs problem
+description: Something on a kubevela.io docs page is wrong, out of date or hard to follow.
+title: "Docs: "
+labels: ["type/docs"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for telling us. The "Report a problem with this page" link at the foot of every docs page fills most of this in for you.
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      description: The URL of the docs page.
+      placeholder: https://kubevela.io/docs/...
+    validations:
+      required: true
+  - type: input
+    id: section
+    attributes:
+      label: Docs section
+      description: Which set of docs the page is in: `default` for the KubeVela docs, or `workflow`, `velaux`, `addons`, `terraform`, `cluster-gateway`, `prism` or `videos`.
+      placeholder: default
+  - type: input
+    id: version
+    attributes:
+      label: Docs version
+      description: The version of the section the page is in, for example `v1.11`, `Next` or `Workflow 0.7`. Leave it empty for a section with no versions (Addons, Terraform, Cluster Gateway, Prism, Videos).
+      placeholder: v1.11
+  - type: dropdown
+    id: category
+    attributes:
+      label: Problem
+      options:
+        - Out of date
+        - Inaccurate
+        - Unclear
+        - Example doesn't work
+        - Broken link or image
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: note
+    attributes:
+      label: Details
+      description: Which part of the page, what you expected, and what you saw. A suggested fix is very welcome.

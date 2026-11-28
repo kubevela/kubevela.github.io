@@ -1,0 +1,74 @@
+/* Sits under the theme's footer row, styled like its "Edit this page" link. */
+.reportRow {
+  margin-bottom: var(--ifm-spacing-vertical);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  color: var(--ifm-link-color);
+  font-size: inherit;
+}
+
+.toggle:hover {
+  text-decoration: underline;
+}
+
+.toggle:focus-visible,
+.field:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.panel {
+  max-width: 32rem;
+  margin-top: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-card-border-radius);
+  background: var(--ifm-background-surface-color);
+}
+
+.heading {
+  margin-bottom: 0.75rem;
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.field {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: var(--ifm-global-radius);
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  font: inherit;
+}
+
+.note {
+  resize: vertical;
+}
+
+.hint {
+  margin-bottom: 0.75rem;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.8rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
