@@ -92,7 +92,7 @@ template: {
 }
 ```
 
-If the HTTP request returns a status code greater than 400, we expect this step to be failed. Use `op.#Fail` to fail this step, and the definition is like:
+If the HTTP request returns a status code of 400 or above, we expect this step to be failed. Use `op.#Fail` to fail this step. Parse the body only when it's JSON, so that an empty or text reply doesn't fail the step after the request has been made. The definition is like:
 
 ```cue
 import (
@@ -123,13 +123,16 @@ template: {
 		}
 	}
 	fail: op.#Steps & {
-		if http.response.statusCode > 400 {
+		if http.response.statusCode >= 400 {
 			requestFail: op.#Fail & {
 				message: "request of \(parameter.url) is fail: \(http.response.statusCode)"
 			}
 		}
 	}
-	response: json.Unmarshal(http.response.body)
+	responseBody: http.response.body
+	if json.Valid(http.response.body) {
+		response: json.Unmarshal(http.response.body)
+	}
 	parameter: {
 		url:    string
 		method: *"GET" | "POST" | "PUT" | "DELETE"

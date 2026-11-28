@@ -692,7 +692,7 @@ The rendered chart sees `replicaCount: 5` (from inline), `resources.limits.memor
 
 #### Authenticating with private chart registries
 
-Add `chart.auth.secretRef` to point at a Secret in the Application's namespace; a Secret in any other namespace is refused. The Secret type controls how credentials are extracted:
+Add `chart.auth.secretRef` to point at a Secret in the Application's own namespace. From v1.11.2 a Secret in any other namespace, the release namespace included, is refused; v1.11.0 and v1.11.1 look in the release namespace by default and accept either. The Secret type controls how credentials are extracted:
 
 | Secret type | Keys read | Use case |
 |---|---|---|
@@ -770,7 +770,7 @@ The same `auth` block works for HTTPS repos (`source` + `repoURL`) and direct `.
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name | Name of the Secret | string | true |  
- namespace | Namespace of the Secret. Defaults to the release namespace, which itself defaults to the Application namespace when `release.namespace` is unset. Must be either the release namespace or the Application namespace; cross-namespace references are rejected. | string | false |  
+ namespace | Namespace of the Secret. From v1.11.2 it defaults to, and must be, the Application's own namespace; any other is refused, the release namespace included. Before v1.11.2 it defaulted to the release namespace and could be the release or the Application's namespace. | string | false |  
 
 Supported Secret types:
 
@@ -793,7 +793,7 @@ An `Opaque` Secret can also include these optional TLS fields: `caFile` (custom 
  ---- | ----------- | ---- | -------- | ------- 
  kind | Source kind. Only `Secret` and `ConfigMap` are supported. `OCIRepository` is not yet supported. | "Secret" or "ConfigMap" | true |  
  name | Name of the Secret or ConfigMap. | string | true |  
- namespace | Namespace of the Secret or ConfigMap. Defaults to the release namespace. An explicit value must match either the release namespace or the Application's own namespace; other namespaces are rejected to prevent cross-tenant reads via the controller's cluster-wide RBAC. | string | false |  
+ namespace | Namespace of the Secret or ConfigMap. From v1.11.2 it defaults to, and must be, the Application's own namespace; any other is refused, the release namespace included, to prevent cross-tenant reads via the controller's cluster-wide RBAC. Before v1.11.2 it defaulted to the release namespace and could be the release or the Application's namespace. | string | false |  
  key | Key inside `.data` whose value is parsed as YAML. Only `.data` is read; `ConfigMap.binaryData` is rejected. | string | false | "values.yaml" 
  optional | If true, a missing Secret/ConfigMap or missing key is skipped silently. Parse errors and permission errors still fail the render. | bool | false | false 
 
@@ -875,6 +875,10 @@ The chart cache is in-memory and scoped to the vela-core controller pod. It rese
 **CRDs from the `crds/` directory are not cleaned up on deletion**
 
 Helm never deletes CRDs installed from a chart's `crds/` directory. This is Helm's own design to prevent data loss. When you delete a helmchart Application, any CRDs that came from the `crds/` directory are left behind and must be cleaned up manually. CRDs that a chart ships as regular template resources are tracked by KubeVela and deleted with the Application.
+
+**A release belongs to one component**
+
+From v1.11.2, a Helm release is owned by the Application component that installed it. Installing a release that another Application owns is refused with `helm release <namespace>/<name> belongs to Application <namespace>/<name> (component <component>); set release.name to give this component its own release`, instead of the two Applications overwriting each other on every reconcile. Two components of one Application can't share a release either. A release whose owning Application no longer exists is adopted.
 
 **Chart cache is in-memory only**
 
